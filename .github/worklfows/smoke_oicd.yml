@@ -1,0 +1,38 @@
+name: OIDC Blob Upload
+on:
+  workflow_dispatch: {}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Prepare text file
+        run: echo "Hello from GitHub OIDC $(date -u +"%Y-%m-%dT%H:%M:%SZ")" > hello.txt
+
+      - name: Ensure container exists
+        run: |
+          az storage container create \
+            --name "${{ vars.CONTAINER }}" \
+            --account-name "${{ vars.SA_NAME }}" \
+            --auth-mode login
+
+      - name: Upload blob via OIDC
+        run: |
+          az storage blob upload \
+            --account-name "${{ vars.SA_NAME }}" \
+            --container-name "${{ vars.CONTAINER }}" \
+            --name "${{ vars.BLOB_NAME }}" \
+            --file hello.txt \
+            --auth-mode login \
+            --overwrite
