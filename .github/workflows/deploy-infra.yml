@@ -9,7 +9,6 @@ permissions:
 jobs:
   tf-preprod:
     runs-on: ubuntu-latest
-    environment: preprod   # pulls env-scoped vars/secrets if defined
     steps:
       - uses: actions/checkout@v4
       - uses: azure/login@v2
