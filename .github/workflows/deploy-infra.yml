@@ -31,7 +31,7 @@ jobs:
           # === map GitHub Vars/Secrets to Terraform variables ===
           TF_VAR_location:            ${{ vars.LOCATION }}           # "eastus"
           TF_VAR_resource_group_name: ${{ vars.RG_PREPROD }}         # "rg-vote-preprod"
-          TF_VAR_app_name:            "vote-preprod"
+          TF_VAR_app_name:            "gh-vote"
           TF_VAR_acr_login_server:    ${{ vars.ACR_LOGIN_SERVER }}   # e.g. "acrlzmsx.azurecr.io"
           TF_VAR_image_tag:           ${{ github.sha }}              # immutable image tag
           TF_VAR_sa_tfstate:          ${{ vars.SA_TFSTATE }}         # "tfstatemsx"
