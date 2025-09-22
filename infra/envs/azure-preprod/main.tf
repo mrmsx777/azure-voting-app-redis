@@ -41,7 +41,34 @@ resource "azurerm_service_plan" "plan" {
   sku_name            = local.appservice_plan_sku
 }
 
+
+############################################################
+
+
+resource "azurerm_user_assigned_identity" "web_uami" {
+  name                = "${var.app_name}-uami"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+}
+
+# Read ACR admin creds (enabled earlier)
+data "azurerm_container_registry" "acr" {
+  name                = replace(var.acr_login_server, ".azurecr.io", "")
+  resource_group_name = "rg-platform-shared"
+}
+
+resource "azurerm_role_assignment" "acr_pull_uami" {
+  scope                = data.azurerm_container_registry.acr.id
+  role_definition_name = "AcrPull"
+  principal_id         = azurerm_user_assigned_identity.web_uami.principal_id
+}
+
+
+############################################################
+
+
 # Web App for Containers (Linux)
+
 resource "azurerm_linux_web_app" "app" {
   name                = var.app_name
   location            = var.location
@@ -51,11 +78,13 @@ resource "azurerm_linux_web_app" "app" {
   https_only          = true
 
   identity {
-    type = "SystemAssigned"
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.web_uami.id]
   }
 
   site_config {
-    container_registry_use_managed_identity = true
+    container_registry_use_managed_identity       = true
+    container_registry_managed_identity_client_id = azurerm_user_assigned_identity.web_uami.client_id
     application_stack {
       docker_image     = "${var.acr_login_server}/voteapp"
       docker_image_tag = var.image_tag
@@ -84,11 +113,6 @@ resource "azurerm_linux_web_app" "app" {
   }
 }
 
-# Read ACR admin creds (enabled earlier)
-data "azurerm_container_registry" "acr" {
-  name                = replace(var.acr_login_server, ".azurecr.io", "")
-  resource_group_name = "rg-platform-shared"
-}
 
 output "default_hostname" {
   value = azurerm_linux_web_app.app.default_hostname
