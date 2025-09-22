@@ -111,6 +111,7 @@ resource "azurerm_linux_web_app" "app" {
     APPLICATIONINSIGHTS_CONNECTION_STRING     = azurerm_application_insights.ai.connection_string
     APPINSIGHTS_INSTRUMENTATIONKEY            = azurerm_application_insights.ai.instrumentation_key
   }
+  depends_on = [azurerm_role_assignment.acr_pull_uami]
 }
 
 
