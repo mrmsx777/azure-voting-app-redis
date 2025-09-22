@@ -1,6 +1,6 @@
 locals {
-  appservice_plan_sku = "B1"
-  redis_sku_name      = "Basic"
+  appservice_plan_sku = "S1"
+  redis_sku_name      = "Standard"
   redis_capacity      = 0     # C0
 }
 
@@ -28,7 +28,7 @@ resource "azurerm_redis_cache" "redis" {
   family              = "C"
   sku_name            = local.redis_sku_name
 
-  enable_non_ssl_port = false
+  non_ssl_port_enabled = false
 }
 
 # App Service Plan (Linux)
