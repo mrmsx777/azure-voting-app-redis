@@ -8,3 +8,6 @@ variable "acr_login_server"   { type = string }           # <- from $TF_VAR_acr_
 variable "image_tag"          { type = string }           # <- from $TF_VAR_image_tag (github.sha)
 variable "sa_tfstate"         { type = string }           # <- from $TF_VAR_sa_tfstate (vars.SA_TFSTATE)  (used in backend)
 variable "tfstate_container"  { type = string }           # <- from $TF_VAR_tfstate_container (vars.TFSTATE_CONTAINER)
+variable "subscription_id" {
+  type = string
+}

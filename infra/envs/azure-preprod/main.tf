@@ -49,6 +49,7 @@ resource "azurerm_user_assigned_identity" "web_uami" {
   name                = "${var.app_name}-uami"
   location            = var.location
   resource_group_name = var.resource_group_name
+  subscription_id     = var.subscription_id
 }
 
 # Read ACR admin creds (enabled earlier)

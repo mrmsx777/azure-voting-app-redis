@@ -35,8 +35,12 @@ jobs:
           TF_VAR_image_tag:           ${{ github.sha }}              # immutable image tag
           TF_VAR_sa_tfstate:          ${{ vars.SA_TFSTATE }}         # "tfstatemsx"
           TF_VAR_tfstate_container:   ${{ vars.TFSTATE_CONTAINER }}  # "tfstate"
+          TF_VAR_subscription_id:     ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          RG_NAME:         ${{ vars.RG_PREPROD }}
 
         run: |
           terraform init
+          terraform import azurerm_resource_group.rg "/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RG_NAME}"
           terraform plan -out tfplan
           terraform apply -auto-approve tfplan
