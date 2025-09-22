@@ -55,6 +55,7 @@ resource "azurerm_linux_web_app" "app" {
   }
 
   site_config {
+    container_registry_use_managed_identity = true
     application_stack {
       docker_image     = "${var.acr_login_server}/voteapp"
       docker_image_tag = var.image_tag
@@ -70,9 +71,8 @@ resource "azurerm_linux_web_app" "app" {
 
     # ACR registry auth (lab-friendly)
     DOCKER_REGISTRY_SERVER_URL                = "https://${var.acr_login_server}"
-    DOCKER_REGISTRY_SERVER_USERNAME           = data.azurerm_container_registry.acr.admin_username
-    DOCKER_REGISTRY_SERVER_PASSWORD           = data.azurerm_container_registry.acr.admin_password
 
+    
     # Redis connection
     REDIS_HOST                                = azurerm_redis_cache.redis.hostname
     REDIS_PORT                                = tostring(azurerm_redis_cache.redis.ssl_port)
