@@ -5,9 +5,8 @@ locals {
 }
 
 # RG (if you prefer, pre-create via CLI and comment this)
-resource "azurerm_resource_group" "rg" {
-  name     = var.resource_group_name
-  location = var.location
+data "azurerm_resource_group" "rg" {
+  name = var.resource_group_name
 }
 
 # Application Insights (classic)
