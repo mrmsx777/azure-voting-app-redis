@@ -41,6 +41,6 @@ jobs:
 
         run: |
           terraform init
-
+          terraform import azurerm_resource_group.rg "/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RG_NAME}"
           terraform plan -out tfplan
           terraform apply -auto-approve tfplan
