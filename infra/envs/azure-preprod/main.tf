@@ -1,6 +1,6 @@
 locals {
-  appservice_plan_sku = "S1"
-  redis_sku_name      = "Standard"
+  appservice_plan_sku = "B1"
+  redis_sku_name      = "Basic"
   redis_capacity      = 0     # C0
 }
 
@@ -11,9 +11,11 @@ resource "azurerm_resource_group" "rg" {
 }
 
 # Application Insights (classic) #azurerm_application_insights
-data "azurerm_application_insights" "ai" {
+resource "azurerm_application_insights" "ai" {
   name                = "${var.app_name}-ai"
+  location            = var.location
   resource_group_name = azurerm_resource_group.rg.name
+  application_type    = "web"
 }
 
 
@@ -33,9 +35,8 @@ resource "azurerm_redis_cache" "redis" {
 # App Service Plan (Linux)
 resource "azurerm_service_plan" "plan" {
   name                = "${var.app_name}-plan"
-  location            = var.location
+  location            = "eastus2"
   resource_group_name = azurerm_resource_group.rg.name
-
   os_type             = "Linux"
   sku_name            = local.appservice_plan_sku
 }
