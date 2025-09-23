@@ -11,9 +11,13 @@ resource "azurerm_resource_group" "rg" {
 }
 
 # Application Insights (classic) #azurerm_application_insights
-data "azurerm_application_insights" "ai" {
+resource "azurerm_application_insights" "ai" {
   name                = "${var.app_name}-ai"
   resource_group_name = azurerm_resource_group.rg.name
+  location            = var.location
+  application_type   = "web"
+  workspace_id      = null
+  lifecycle { ignore_changes = [workspace_id] }
 }
 
 # Redis Cache
