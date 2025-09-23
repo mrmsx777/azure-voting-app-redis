@@ -69,8 +69,8 @@ resource "azurerm_role_assignment" "acr_pull_uami" {
 
 resource "azurerm_linux_web_app" "app" {
   name                = var.app_name
-  location            = var.location
   resource_group_name = azurerm_resource_group.rg.name
+  location            = data.azurerm_service_plan.plan.location
   service_plan_id     = data.azurerm_service_plan.plan.id
 
   https_only          = true
