@@ -11,13 +11,10 @@ resource "azurerm_resource_group" "rg" {
 }
 
 # Application Insights (classic) #azurerm_application_insights
-resource "azurerm_application_insights" "ai" {
+data "azurerm_application_insights" "ai" {
   name                = "${var.app_name}-ai"
-  location            = var.location
-  resource_group_name = azurerm_resource_group.rg.name
-  application_type    = "web"
+  resource_group_name = data.azurerm_resource_group.rg.name
 }
-
 
 # Redis Cache
 resource "azurerm_redis_cache" "redis" {
@@ -105,8 +102,8 @@ resource "azurerm_linux_web_app" "app" {
     REDIS_PASSWORD                            = azurerm_redis_cache.redis.primary_access_key
 
     # App Insights
-    APPLICATIONINSIGHTS_CONNECTION_STRING     = azurerm_application_insights.ai.connection_string
-    APPINSIGHTS_INSTRUMENTATIONKEY            = azurerm_application_insights.ai.instrumentation_key
+    APPLICATIONINSIGHTS_CONNECTION_STRING     = data.azurerm_application_insights.ai.connection_string
+    APPINSIGHTS_INSTRUMENTATIONKEY            = data.azurerm_application_insights.ai.instrumentation_key
   }
   depends_on = [azurerm_role_assignment.acr_pull_uami]
 }
