@@ -42,6 +42,6 @@ jobs:
         run: |
           terraform init 
           terraform import azurerm_redis_cache.redis \
-          "/subscriptions/b7839e7e-af78-4318-937e-2dcab5c8fca0/resourceGroups/rg-vote-preprod/providers/Microsoft.Cache/Redis/gh-vote-redis"
+          "/subscriptions/b7839e7e-af78-4318-937e-2dcab5c8fca0/resourceGroups/rg-vote-preprod/providers/Microsoft.Cache/redis/gh-vote-redis"
           terraform plan -out tfplan
           terraform apply -auto-approve tfplan
