@@ -13,7 +13,7 @@ resource "azurerm_resource_group" "rg" {
 # Application Insights (classic) #azurerm_application_insights
 data "azurerm_application_insights" "ai" {
   name                = "${var.app_name}-ai"
-  resource_group_name = data.azurerm_resource_group.rg.name
+  resource_group_name = azurerm_resource_group.rg.name
 }
 
 # Redis Cache
