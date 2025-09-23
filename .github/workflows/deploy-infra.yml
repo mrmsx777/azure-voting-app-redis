@@ -40,9 +40,7 @@ jobs:
           RG_NAME:         ${{ vars.RG_PREPROD }}
           
         run: |
-          terraform init
-          terraform import azurerm_application_insights.ai \
-          "/subscriptions/b7839e7e-af78-4318-937e-2dcab5c8fca0/resourceGroups/rg-vote-preprod/providers/Microsoft.Insights/components/gh-vote-ai"
+          terraform init 
           terraform import azurerm_redis_cache.redis \
           "/subscriptions/b7839e7e-af78-4318-937e-2dcab5c8fca0/resourceGroups/rg-vote-preprod/providers/Microsoft.Cache/Redis/gh-vote-redis"
           terraform plan -out tfplan
