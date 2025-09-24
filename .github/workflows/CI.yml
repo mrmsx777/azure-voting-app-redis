@@ -22,7 +22,7 @@ jobs:
         run: az acr login --name ${{ vars.ACR_NAME }}
 
       - name: Build image
-        working-directory: ./  # path that contains Dockerfile; for the Azure Voting App it's the repo root
+        working-directory: ./azure-vote  # path that contains Dockerfile; for the Azure Voting App it's the repo root
         run: |
           docker build -t ${{ vars.ACR_LOGIN_SERVER }}/voteapp:${{ github.sha }} .
 

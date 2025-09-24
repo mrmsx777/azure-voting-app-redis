@@ -56,6 +56,10 @@ az role assignment create --assignee-object-id "$SP_ID" --assignee-principal-typ
 az role assignment create --assignee-object-id "$SP_ID" --assignee-principal-type ServicePrincipal \
   --role "Contributor" --scope "$(az group show -n $RG_PREPROD --query id -o tsv)"
 
+#ADD HERE WEBUAMI ROLE & ASSIGNMENT FOR ACR PULL
+
+
+
 # Prod Contributor (you can tighten later with PIM)
 az role assignment create --assignee-object-id "$SP_ID" --assignee-principal-type ServicePrincipal \
   --role "Contributor" --scope "$(az group show -n $RG_PROD --query id -o tsv)"
