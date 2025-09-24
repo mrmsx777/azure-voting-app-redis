@@ -1,9 +1,6 @@
 name: CI - Build & Push
 
 on:  
-  push:
-    branches: [ "master","main" ]
-  
   workflow_dispatch: {}
 
 permissions:

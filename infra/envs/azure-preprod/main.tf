@@ -101,9 +101,9 @@ resource "azurerm_linux_web_app" "app" {
 
     
     # Redis connection
-    REDIS_HOST                                = azurerm_redis_cache.redis.hostname
+    REDIS                                     = azurerm_redis_cache.redis.hostname
     REDIS_PORT                                = tostring(azurerm_redis_cache.redis.ssl_port)
-    REDIS_PASSWORD                            = azurerm_redis_cache.redis.primary_access_key
+    REDIS_PWD                                 = azurerm_redis_cache.redis.primary_access_key
 
     # App Insights
     APPLICATIONINSIGHTS_CONNECTION_STRING     = azurerm_application_insights.ai.connection_string
