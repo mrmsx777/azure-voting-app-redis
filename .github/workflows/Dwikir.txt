@@ -2,3 +2,10 @@ evening tasks :
 read more the app connection part and back end calls 
 deploy version , check container in deployement slots
 utilize deployement slots and have routes from Preprod/prd
+
+
+
+
+NGINX WSUG : backend calls analysis
+
+githbu.sha meaing

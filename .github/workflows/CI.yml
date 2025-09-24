@@ -1,10 +1,15 @@
 name: CI - Build & Push
-on:
+
+on:  
   push:
-    branches: [ "main" ]
+    branches: [ "master","main" ]
+  
+  workflow_dispatch: {}
+
 permissions:
   id-token: write
   contents: read
+
 
 jobs:
   build-push:
