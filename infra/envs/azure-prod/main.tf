@@ -4,7 +4,7 @@ locals {
   redis_capacity      = 0     # C0
 }
 
-resource "azurerm_resource_group" "rg" {
+data "azurerm_resource_group" "rg" {
   name     = var.resource_group_name
   location = var.location
 }
@@ -12,7 +12,7 @@ resource "azurerm_resource_group" "rg" {
 # Application Insights (classic)
 resource "azurerm_application_insights" "ai" {
   name                 = "${var.app_name}-ai-prod"
-  resource_group_name  = azurerm_resource_group.rg.name
+  resource_group_name  = data.azurerm_resource_group.rg.name
   location             = var.location
   application_type     = "web"
   workspace_id         = null
@@ -23,7 +23,7 @@ resource "azurerm_application_insights" "ai" {
 resource "azurerm_redis_cache" "redis" {
   name                = "${var.app_name}-redis-prod"
   location            = var.location
-  resource_group_name = azurerm_resource_group.rg.name
+  resource_group_name = data.azurerm_resource_group.rg.name
 
   capacity            = local.redis_capacity
   family              = "C"
@@ -68,7 +68,7 @@ resource "azurerm_role_assignment" "acr_pull_uami" {
 # Web App for Containers (Linux) 
 resource "azurerm_linux_web_app" "app" {
   name                = "${var.app_name}-prod"
-  resource_group_name = azurerm_resource_group.rg.name
+  resource_group_name = data.azurerm_resource_group.rg.name
   location            = azurerm_service_plan.plan.location
   service_plan_id     = azurerm_service_plan.plan.id
 
