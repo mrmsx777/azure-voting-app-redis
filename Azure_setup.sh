@@ -71,4 +71,4 @@ echo "ACR_LOGIN_SERVER   : $ACR_LOGIN_SERVER"
 echo "ACR_NAME           : $ACR_NAME"
 echo "TF STATE ACCOUNT   : $SA_TFSTATE"
 
-#test
+#test1
