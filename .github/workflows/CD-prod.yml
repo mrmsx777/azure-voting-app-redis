@@ -1,0 +1,45 @@
+# .github/workflows/CD-prod.yml
+name: Deploy Infra
+on:
+  workflow_dispatch: {}
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  tf-prod:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform init/plan/apply (prod)
+        working-directory: infra/envs/azure-prod
+        env:
+          ARM_USE_OIDC: true
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+          # === map GitHub Vars/Secrets to Terraform variables ===
+          TF_VAR_location:            ${{ vars.LOCATION }}           # "eastus"
+          TF_VAR_resource_group_name: ${{ vars.RG_PROD }}         # "rg-vote-prod"
+          TF_VAR_app_name:            "gh-vote"
+          TF_VAR_acr_login_server:    ${{ vars.ACR_LOGIN_SERVER }}   # e.g. "acrlzmsx.azurecr.io"
+          TF_VAR_image_tag:           ${{ github.sha }}              # immutable image tag
+          TF_VAR_sa_tfstate:          ${{ vars.SA_TFSTATE }}         # "tfstatemsx"
+          TF_VAR_tfstate_container:   ${{ vars.TFSTATE_CONTAINER }}  # "tfstate"
+          TF_VAR_subscription_id:     ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          RG_NAME:         ${{ vars.RG_PROD }}
+          
+        run: |
+          terraform init 
+          terraform plan -out tfplan
+          terraform apply -auto-approve tfplan
