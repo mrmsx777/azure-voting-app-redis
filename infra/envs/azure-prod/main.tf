@@ -84,7 +84,7 @@ resource "azurerm_linux_web_app" "app" {
 
     application_stack {
       docker_image     = "${var.acr_login_server}/voteapp"
-      docker_image_tag = "prod"
+      docker_image_tag = var.image_tag
     }
   }
 
