@@ -119,7 +119,7 @@ resource "azurerm_linux_web_app_slot" "staging" {
 
   site_config {
     container_registry_use_managed_identity       = true
-    container_registry_managed_identity_client    = azurerm_user_assigned_identity.web_uami.client_id
+    container_registry_managed_identity_client_id = azurerm_user_assigned_identity.web_uami.client_id
   
     application_stack {
       docker_image     = "${var.acr_login_server}/voteapp"
