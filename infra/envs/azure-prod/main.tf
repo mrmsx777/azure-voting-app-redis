@@ -84,7 +84,7 @@ resource "azurerm_linux_web_app" "app" {
 
     application_stack {
       docker_image     = "${var.acr_login_server}/voteapp"
-      docker_image_tag = var.image_tag
+      docker_image_tag = "prod"
     }
   }
 
@@ -105,7 +105,32 @@ resource "azurerm_linux_web_app" "app" {
     APPINSIGHTS_INSTRUMENTATIONKEY                = azurerm_application_insights.ai.instrumentation_key
   }
 
+  lifecycle {
+      ignore_changes = [site_config[0].application_stack[0].docker_image_tag]
+  }
+  
   depends_on = [azurerm_role_assignment.acr_pull_uami]
+}
+
+# Deployment Slot - Staging
+resource "azurerm_linux_web_app_slot" "staging" {
+  name                = "green"
+  app_service_id      = azurerm_linux_web_app.app.id
+
+  site_config {
+    container_registry_use_managed_identity       = true
+    container_registry_managed_identity_client    = azurerm_user_assigned_identity.web_uami.client_id
+  
+    application_stack {
+      docker_image     = "${var.acr_login_server}/voteapp"
+      docker_image_tag = "placeholder"   
+    }
+  }
+
+  lifecycle {
+      ignore_changes = [site_config[0].application_stack[0].docker_image_tag]
+  }
+
 }
 
 output "default_hostname" {
